@@ -71,10 +71,6 @@ def webhook():
     
     bid = float(client.futures_orderbook_ticker(symbol =symbol)['bidPrice'])
     ask = float(client.futures_orderbook_ticker(symbol =symbol)['askPrice'])
-    if fiat>0
-        #calculate amount of USDT oney to buy fiat
-        fiat_bid=fiat*bid
-        fiat_ask=fiat*ask
         
     posiAmt = percent*float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])/100
     
