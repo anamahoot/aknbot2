@@ -138,15 +138,16 @@ def webhook():
                     qty_precision = int(j['quantityPrecision'])
             #check if sell in @ or fiat
             if amount[0]=='%':            
-                qty_close=posiAmt
+                qty_close=round(posiAmt,qty_precision)
                 usdt=round(qty_close*ask,qty_precision)
                 print("SELL/CloseLong by % amount=", qty_close, " ", COIN, ">> USDT=",round(usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])
-                qty_close = usdt/ask            
+                qty_close = round(usdt/ask,qty_precision)
                 print("SELL/CloseLong by USDT amount=", usdt, ">> COIN", round(usdt*qty_close,30))
             print("CF>>", symbol,">>", action, ">> Qty=", qty_close, " ", COIN,">>USDT=", round(usdt,3))                    
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
+            
             close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)
             #success close sell, push line notification        
             msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*bid),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*bid/lev),3)) + " USDT"
@@ -161,12 +162,12 @@ def webhook():
                     qty_precision = int(j['quantityPrecision'])
             #check if buy in @ or fiat
             if amount[0]=='%':            
-                qty_close=posiAmt
+                qty_close=round(posiAmt,qty_precision)
                 usdt=round(qty_close*bid,qty_precision)
                 print("BUY/CloseShort by % amount=", qty_close, " ", COIN, ">> USDT=",round(qty_close*usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])
-                qty_close = usdt/bid
+                qty_close = round(usdt/bid,qty_precision)
                 print("BUY/CloseShort by USDT amount=", usdt, ">> COIN", round(qty_close,3))
             print("CF>>", symbol,">>",action, ">>Qty=",qty_close, " ", COIN,">>USDT=", round(usdt,3))
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
