@@ -140,7 +140,7 @@ def webhook():
             if amount[0]=='%':            
                 qty_close=posiAmt
                 usdt=round(fiat*ask,qty_precision)
-                print("SELL/CloseLong by % amount=", Qty_Sell, " ", COIN, ">> USDT=",round(usdt,3))
+                print("SELL/CloseLong by % amount=", qty_close, " ", COIN, ">> USDT=",round(usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])
                 qty_close = usdt/ask            
