@@ -77,7 +77,8 @@ def webhook():
         
     #List of action OpenLong=BUY, OpenShort=SELL, StopLossLong, StopLossShort, CloseLong=LongTP, CloseShort=ShortTP, CloseLong, CloseShort, 
     #OpenLong/BUY    
-    if action == "OpenLong" and usdt>0:
+    #if action == "OpenLong" and usdt>0:
+    if action == "OpenLong" :
         qty_precision = 0
         for j in client.futures_exchange_info()['symbols']:
             if j['symbol'] == symbol:
@@ -104,7 +105,8 @@ def webhook():
         r = requests.post(url, headers=headers, data = {'message':msg})
         
     #OpenShort/SELL
-    if action == "OpenShort" and usdt > 0:        
+    #if action == "OpenShort" and usdt > 0:        
+    if action == "OpenShort" :                
         qty_precision = 0
         for j in client.futures_exchange_info()['symbols']:
             if j['symbol'] == symbol:
