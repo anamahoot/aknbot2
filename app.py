@@ -72,10 +72,9 @@ def webhook():
     bid = float(client.futures_orderbook_ticker(symbol =symbol)['bidPrice'])
     ask = float(client.futures_orderbook_ticker(symbol =symbol)['askPrice'])
         
-    posiAmt = percent*float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])/100
+    posiAmt = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
     print("100% Position amount>>",float(client.futures_position_information(symbol=symbol)[0]['positionAmt']))
-    print(percent,"% Position amount>>", posiAmt )
-    
+        
     #List of action OpenLong=BUY, OpenShort=SELL, StopLossLong, StopLossShort, CloseLong=LongTP, CloseShort=ShortTP, CloseLong, CloseShort, 
     #OpenLong/BUY    
     if action == "OpenLong" and usdt>0:
@@ -141,7 +140,7 @@ def webhook():
             print("qty_precision",qty_precision)
             #check if sell in % or $
             if amount[0]=='%':            
-                qty_close=round(posiAmt,qty_precision)                
+                qty_close=round(percent*posiAmt/100,qty_precision)                
                 usdt=round(qty_close*ask,qty_precision)                
                 print("SELL/CloseLong by % amount=", qty_close, " ", COIN, ">> USDT=",round(usdt,3))
             if amount[0]=='$':
@@ -164,7 +163,7 @@ def webhook():
                     qty_precision = int(j['quantityPrecision'])
             #check if buy in @ or fiat
             if amount[0]=='%':            
-                qty_close=round(posiAmt,qty_precision)
+                qty_close=round(percent*posiAmt/100,qty_precision)
                 usdt=round(qty_close*bid,qty_precision)
                 print("BUY/CloseShort by % amount=", qty_close, " ", COIN, ">> USDT=",round(qty_close*usdt,3))
             if amount[0]=='$':
