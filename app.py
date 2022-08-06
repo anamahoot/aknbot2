@@ -87,11 +87,11 @@ def webhook():
             fiat=float(amount[1:len(amount)])
             Qty_buy=fiat
             usdt=round(fiat*bid,qty_precision)
-            print("BUY by @ amount=", fiat, " ", COIN, ">> USDT=",round(usdt,3))
+            print("BUY/LONG by @ amount=", fiat, " ", COIN, ">> USDT=",round(usdt,3))
         if amount[0]=='$':
             usdt=float(amount[1:len(amount)])
             Qty_buy = usdt/bid
-            print("BUY by USDT amount=", usdt, ">> COIN", round(usdt,30))
+            print("BUY/LONG by USDT amount=", usdt, ">> COIN", round(usdt,30))
         print("CF>>", symbol,">>",action, ">>Qty=",Qty_buy, " ", COIN,">>USDT=", round(usdt,3))
         Qty_buy = round(Qty_buy,qty_precision)
         print('qty buy : ',Qty_buy)
@@ -106,11 +106,21 @@ def webhook():
     #OpenShort
     #if action == "SELL":
     if action == "OpenShort":        
-        qty_precision = 0
+        qty_precision = 5
         for j in client.futures_exchange_info()['symbols']:
             if j['symbol'] == symbol:
                 qty_precision = int(j['quantityPrecision'])
-        Qty_sell = usdt/ask
+        #check if sell in @ or fiat
+        if amount[0]=='@':            
+            fiat=float(amount[1:len(amount)])
+            Qty_sell=fiat
+            usdt=round(fiat*ask,qty_precision)
+            print("SELL/SHORT by @ amount=", fiat, " ", COIN, ">> USDT=",round(usdt,3))
+        if amount[0]=='$':
+            usdt=float(amount[1:len(amount)])
+            Qty_sell = usdt/ask
+            print("BUY by USDT amount=", usdt, ">> COIN", round(usdt,30))
+        print("CF>>", symbol,">>", action, ">> Qty=", Qty_sell, " ", COIN,">>USDT=", round(usdt,3))
         Qty_sell = round(Qty_sell,qty_precision)
         print('qty sell : ',Qty_sell)
         client.futures_change_leverage(symbol=symbol,leverage=lev)
