@@ -74,7 +74,7 @@ def webhook():
         
     posiAmt = percent*float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])/100
     print("100% Position amount>>",float(client.futures_position_information(symbol=symbol)[0]['positionAmt']))
-    print(percent"% Position amount>>",posiAmt)
+    print(percent,"% Position amount>>", posiAmt )
     
     #List of action OpenLong=BUY, OpenShort=SELL, StopLossLong, StopLossShort, CloseLong=LongTP, CloseShort=ShortTP, CloseLong, CloseShort, 
     #OpenLong/BUY    
