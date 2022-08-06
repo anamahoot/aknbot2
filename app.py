@@ -12,6 +12,8 @@ API_SECRET = str(os.environ['API_SECRET'])
 TEST_NET = bool(str(os.environ['TEST_NET']))
 LINE_TOKEN=str(os.environ['LINE_TOKEN'])
 BOT_NAME=str(os.environ['BOT_NAME'])
+FREEBALANCE=str(os.environ['FREEBALANCE'])
+SECRET_KEY=str(os.environ['SECRET_KEY'])
 
 client = Client(API_KEY,API_SECRET,testnet=TEST_NET)
 
@@ -27,22 +29,39 @@ headers = {'content-type':'application/x-www-form-urlencoded','Authorization':'B
 #r = requests.post(url, headers=headers, data = {'message':msg})
 #print (r.text)
 
-print(API_KEY)
-print(API_SECRET)
+#print(API_KEY)
+#print(API_SECRET)
 
 @app.route("/")
 def hello_world():
-    return "Hello Welcome!"
+    return "AKNB2"
 
 @app.route("/webhook", methods=['POST'])
 def webhook():
     data = json.loads(request.data)
-    print("arrr data")
-
-    action = data['action']
+    print("decoding data...")
+    action = data['side']
+    amount = data['amount']
     symbol = data['ticker']
-    usdt = data['quantity(USDT)']
+    passphrase = data['passphrase']
     lev = data['leverage']
+    #separate amount type
+    fiat=0
+    usdt=0
+    percent=0
+    
+    if amount[0]=='@':
+        fiat=float(amount[1:len(amount)])
+    if amount[0]=='$':
+        usdt=float(amount[1:len(amount)])
+    if amount[0]=='%':
+        percent= float(amount[1:len(amount)])
+    print(symbol, " : ",action," : amount=",amount," : leverage=" , leverage)
+    print('amount=',amount)
+    print('fiat=',fiat)
+    print('USDT=',usdt)
+    print('Percent=',percent)
+        
     COIN = symbol[0:len(symbol)-4] 
 
     bid = 0
