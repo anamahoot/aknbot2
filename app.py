@@ -138,7 +138,8 @@ def webhook():
             for j in client.futures_exchange_info()['symbols']:
                 if j['symbol'] == symbol:
                     qty_precision = int(j['quantityPrecision'])
-            #check if sell in @ or fiat
+            print("qty_precision",qty_precision)
+            #check if sell in % or $
             if amount[0]=='%':            
                 qty_close=round(posiAmt,qty_precision)
                 usdt=round(qty_close*ask,qty_precision)
