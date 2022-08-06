@@ -52,7 +52,7 @@ def webhook():
     
     #trim PERT from symbol
     if (symbol[len(symbol)-4:len(symbol)]) == "PERP":
-    symbol=symbol[0:len(symbol)-4]
+        symbol=symbol[0:len(symbol)-4]
 
     
     COIN = symbol[0:len(symbol)-4] 
