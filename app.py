@@ -66,8 +66,8 @@ def webhook():
 
     bid = 0
     ask = 0
-    #usdt = float(usdt)
-    #lev = int(lev)
+    usdt = float(usdt)
+    lev = int(lev)
     
     bid = float(client.futures_orderbook_ticker(symbol =symbol)['bidPrice'])
     ask = float(client.futures_orderbook_ticker(symbol =symbol)['askPrice'])
@@ -87,10 +87,12 @@ def webhook():
             fiat=float(amount[1:len(amount)])
             Qty_buy=fiat
             usdt=round(fiat*bid,qty_precision)
+            print("BUY by @ amount=", fiat, " ", COIN, ">> USDT=",round(usdt,3))
         if amount[0]=='$':
             usdt=float(amount[1:len(amount)])
             Qty_buy = usdt/bid
-        print("CF>>", symbol,">>",action, ">>Qty=",Qty_buy, " ", COIN)
+            print("BUY by USDT amount=", usdt, ">> COIN", round(usdt,30))
+        print("CF>>", symbol,">>",action, ">>Qty=",Qty_buy, " ", COIN,">>USDT=", round(usdt,3))
         Qty_buy = round(Qty_buy,qty_precision)
         print('qty buy : ',Qty_buy)
         client.futures_change_leverage(symbol=symbol,leverage=lev)
@@ -98,7 +100,7 @@ def webhook():
         order_BUY = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=Qty_buy)
         print(symbol," : BUY")
         #success openlong, push line notification        
-        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[LONG]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(usdt/lev,3)) + " USDT"
+        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(usdt/lev,3)) + " USDT"
         r = requests.post(url, headers=headers, data = {'message':msg})
         
     #OpenShort
