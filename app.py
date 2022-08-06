@@ -78,7 +78,7 @@ def webhook():
     #OpenLong    
     #if action == "BUY":
     if action == "OpenLong":
-        qty_precision = 3
+        qty_precision = 5
         for j in client.futures_exchange_info()['symbols']:
             if j['symbol'] == symbol:
                 qty_precision = int(j['quantityPrecision'])
