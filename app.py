@@ -169,7 +169,7 @@ def webhook():
                 print("BUY/CloseShort by % amount=", qty_close, " ", COIN, ">> USDT=",round(usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])
-                qty_close = round(usdt/bid,qty_precision)*-1
+                qty_close = -1*round(usdt/bid,qty_precision)
                 print("BUY/CloseShort by USDT amount=", usdt, ">> COIN", round(qty_close,3))
             print("CF>>", symbol,">>",action, ">>Qty=",qty_close, " ", COIN,">>USDT=", round(usdt,3))
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
