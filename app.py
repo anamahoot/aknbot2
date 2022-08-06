@@ -66,21 +66,34 @@ def webhook():
 
     bid = 0
     ask = 0
-    usdt = float(usdt)
-    lev = int(lev)
+    #usdt = float(usdt)
+    #lev = int(lev)
     
-
     bid = float(client.futures_orderbook_ticker(symbol =symbol)['bidPrice'])
     ask = float(client.futures_orderbook_ticker(symbol =symbol)['askPrice'])
-
-    posiAmt = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
-    #OpenLong
-    if action == "BUY":
+    if fiat>0
+        #calculate amount of USDT oney to buy fiat
+        fiat_bid=fiat*bid
+        fiat_ask=fiat*ask
+        
+    posiAmt = percent*float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])/100
+    
+    #List of action OpenLong=BUY, OpenShort=SELL, StopLossLong, StopLossShort, CloseLong=LongTP, CloseShort=ShortTP, CloseLong, CloseShort, 
+    #OpenLong    
+    #if action == "BUY":
+    if action == "OpenLong":
         qty_precision = 0
         for j in client.futures_exchange_info()['symbols']:
             if j['symbol'] == symbol:
                 qty_precision = int(j['quantityPrecision'])
-        Qty_buy = usdt/bid
+        #check if buy in @ or fiat
+        if amount[0]=='@':            
+            fiat=float(amount[1:len(amount)])
+            Qty_buy=fiat
+        if amount[0]=='$':
+            usdt=float(amount[1:len(amount)])
+            Qty_buy = usdt/bid
+        print("CF>>", symbol,">>",action, ">>Qty=",Qty_buy, " ", COIN)
         Qty_buy = round(Qty_buy,qty_precision)
         print('qty buy : ',Qty_buy)
         client.futures_change_leverage(symbol=symbol,leverage=lev)
@@ -92,7 +105,8 @@ def webhook():
         r = requests.post(url, headers=headers, data = {'message':msg})
         
     #OpenShort
-    if action == "SELL":
+    #if action == "SELL":
+    if action == "OpenShort":        
         qty_precision = 0
         for j in client.futures_exchange_info()['symbols']:
             if j['symbol'] == symbol:
