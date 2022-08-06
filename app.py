@@ -139,12 +139,12 @@ def webhook():
             #check if sell in @ or fiat
             if amount[0]=='%':            
                 qty_close=posiAmt
-                usdt=round(fiat*ask,qty_precision)
+                usdt=round(qty_close*ask,qty_precision)
                 print("SELL/CloseLong by % amount=", qty_close, " ", COIN, ">> USDT=",round(usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])
                 qty_close = usdt/ask            
-                print("SELL/CloseLong by USDT amount=", usdt, ">> COIN", round(usdt,30))
+                print("SELL/CloseLong by USDT amount=", usdt, ">> COIN", round(usdt*qty_close,30))
             print("CF>>", symbol,">>", action, ">> Qty=", qty_close, " ", COIN,">>USDT=", round(usdt,3))                    
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
             close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)
@@ -162,12 +162,12 @@ def webhook():
             #check if buy in @ or fiat
             if amount[0]=='%':            
                 qty_close=posiAmt
-                usdt=round(fiat*bid,qty_precision)
-                print("BUY/CloseShort by % amount=", qty_close, " ", COIN, ">> USDT=",round(usdt,3))
+                usdt=round(qty_close*bid,qty_precision)
+                print("BUY/CloseShort by % amount=", qty_close, " ", COIN, ">> USDT=",round(qty_close*usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])
                 qty_close = usdt/bid
-                print("BUY/CloseShort by USDT amount=", usdt, ">> COIN", round(usdt,30))
+                print("BUY/CloseShort by USDT amount=", usdt, ">> COIN", round(qty_close,3))
             print("CF>>", symbol,">>",action, ">>Qty=",qty_close, " ", COIN,">>USDT=", round(usdt,3))
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
             close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)            
