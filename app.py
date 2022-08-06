@@ -146,7 +146,7 @@ def webhook():
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])                
                 qty_close = round(usdt/ask,qty_precision)                
-                print("SELL/CloseLong by USDT amount=", usdt, ">> COIN", round(usdt*qty_close,30))
+                print("SELL/CloseLong by USDT amount=", usdt, ">> COIN", round(usdt*qty_close,3))
             print("CF>>", symbol,">>", action, ">> Qty=", qty_close, " ", COIN,">>USDT=", round(usdt,3))                    
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])            
             close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)
@@ -161,11 +161,12 @@ def webhook():
             for j in client.futures_exchange_info()['symbols']:
                 if j['symbol'] == symbol:
                     qty_precision = int(j['quantityPrecision'])
-            #check if buy in @ or fiat
+            print("qty_precision",qty_precision)
+            #check if buy in % or $
             if amount[0]=='%':            
                 qty_close=round(percent*posiAmt/100,qty_precision)
                 usdt=round(qty_close*bid,qty_precision)
-                print("BUY/CloseShort by % amount=", qty_close, " ", COIN, ">> USDT=",round(qty_close*usdt,3))
+                print("BUY/CloseShort by % amount=", qty_close, " ", COIN, ">> USDT=",round(usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])
                 qty_close = round(usdt/bid,qty_precision)
