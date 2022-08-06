@@ -78,7 +78,7 @@ def webhook():
     #OpenLong    
     #if action == "BUY":
     if action == "OpenLong":
-        qty_precision = 0
+        qty_precision = 3
         for j in client.futures_exchange_info()['symbols']:
             if j['symbol'] == symbol:
                 qty_precision = int(j['quantityPrecision'])
@@ -86,6 +86,7 @@ def webhook():
         if amount[0]=='@':            
             fiat=float(amount[1:len(amount)])
             Qty_buy=fiat
+            usdt=round(fiat*bid,qty_precision)
         if amount[0]=='$':
             usdt=float(amount[1:len(amount)])
             Qty_buy = usdt/bid
