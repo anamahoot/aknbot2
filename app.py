@@ -75,8 +75,7 @@ def webhook():
     posiAmt = percent*float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])/100
     
     #List of action OpenLong=BUY, OpenShort=SELL, StopLossLong, StopLossShort, CloseLong=LongTP, CloseShort=ShortTP, CloseLong, CloseShort, 
-    #OpenLong    
-    #if action == "BUY":
+    #OpenLong/BUY    
     if action == "OpenLong":
         qty_precision = 0
         for j in client.futures_exchange_info()['symbols']:
@@ -103,8 +102,7 @@ def webhook():
         msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(usdt/lev,3)) + " USDT"
         r = requests.post(url, headers=headers, data = {'message':msg})
         
-    #OpenShort
-    #if action == "SELL":
+    #OpenShort/SELL
     if action == "OpenShort":        
         qty_precision = 0
         for j in client.futures_exchange_info()['symbols']:
@@ -132,10 +130,7 @@ def webhook():
         r = requests.post(url, headers=headers, data = {'message':msg})
 
         
-    #StopLossLong(SELL), StopLossShort(BUY)
-    #StopLoss
-    #if action == "SL":
-    if action == "StopLossLong":
+    if action == "CloseLong":
         if posiAmt > 0.0 :
             qty_precision = 0
             for j in client.futures_exchange_info()['symbols']:
@@ -143,22 +138,21 @@ def webhook():
                     qty_precision = int(j['quantityPrecision'])
             #check if sell in @ or fiat
             if amount[0]=='%':            
-                Qty_sell=posiAmt
+                qty_close=posiAmt
                 usdt=round(fiat*ask,qty_precision)
                 print("SELL/StopLossLong by % amount=", Qty_Sell, " ", COIN, ">> USDT=",round(usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])
-                Qty_sell = usdt/ask            
+                qty_close = usdt/ask            
                 print("SELL/StopLossLong by USDT amount=", usdt, ">> COIN", round(usdt,30))
             print("CF>>", symbol,">>", action, ">> Qty=", Qty_sell, " ", COIN,">>USDT=", round(usdt,3))                    
-            qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
+            #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
             close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)
             #success close sell, push line notification        
             msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*bid),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*bid/lev),3)) + " USDT"
             r = requests.post(url, headers=headers, data = {'message':msg})
             print(symbol,": StopLossLong")
-    #if action == "SL":
-    if action == "StopLossShort":
+    if action == "CloseShort":
         if posiAmt < 0.0 :
             qty_precision = 0
             for j in client.futures_exchange_info()['symbols']:
@@ -166,54 +160,22 @@ def webhook():
                     qty_precision = int(j['quantityPrecision'])
             #check if buy in @ or fiat
             if amount[0]=='%':            
-                Qty_buy=posiAmt
+                qty_close=posiAmt
                 usdt=round(fiat*bid,qty_precision)
                 print("BUY/StopLossShort by amount=", Qty_buy, " ", COIN, ">> USDT=",round(usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])
-                Qty_buy = usdt/bid
+                qty_close = usdt/bid
                 print("BUY/StopLossShort by USDT amount=", usdt, ">> COIN", round(usdt,30))
             print("CF>>", symbol,">>",action, ">>Qty=",Qty_buy, " ", COIN,">>USDT=", round(usdt,3))
-            qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
+            #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
             close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)
             print(symbol,": StopLossShort")
             #success close buy, push line notification        
             msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*ask*-1),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*ask*-1/lev),3)) + " USDT"
             r = requests.post(url, headers=headers, data = {'message':msg})
             print(symbol,": StopLossShort")
-    #TakeProfit
-    if action == "TP":
-        if posiAmt > 0.0 :
-            qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
-            close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)
-            #success close sell, push line notification                    
-            msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round(qty_close*bid,3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round(qty_close*bid/lev,3)) + " USDT"            
-            r = requests.post(url, headers=headers, data = {'message':msg})
-            print(symbol,": TakeProfit")
-
-        if posiAmt < 0.0 :
-            qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
-            close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)
-            #success close buy, push line notification        
-            msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round(qty_close*ask*-1,3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round(qty_close*ask*-1/lev,3)) + " USDT"            
-            r = requests.post(url, headers=headers, data = {'message':msg})            
-            print(symbol,": TakeProfit")
-    #CloseLong
-    if action == "CloseBuy":
-        qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
-        close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)
-        #success close sell, push line notification                
-        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*bid),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*bid/lev),3)) + " USDT"        
-        r = requests.post(url, headers=headers, data = {'message':msg})        
-        print(symbol,": Close Buy")
-    #CloseShort
-    if action == "CloseSell":
-        qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
-        close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)
-        #success close buy, push line notification        
-        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*ask*-1),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*ask*-1/lev),3)) + " USDT"
-        r = requests.post(url, headers=headers, data = {'message':msg})        
-        print(symbol,": Close Sell")
+            #CloseLong
 
     if action == "test":
         print("TEST!")
