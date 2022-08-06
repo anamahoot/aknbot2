@@ -56,7 +56,7 @@ def webhook():
         usdt=float(amount[1:len(amount)])
     if amount[0]=='%':
         percent= float(amount[1:len(amount)])
-    print(symbol, " : ",action," : amount=",amount," : leverage=" , leverage)
+    print(symbol, " : ",action," : amount=",amount," : leverage=" , lev)
     print('amount=',amount)
     print('fiat=',fiat)
     print('USDT=',usdt)
