@@ -50,19 +50,24 @@ def webhook():
     usdt=0
     percent=0
     
+    COIN = symbol[0:len(symbol)-4] 
+    
     if amount[0]=='@':
         fiat=float(amount[1:len(amount)])
+        print("COIN>>",symbol, " : ",action," : amount=",fiat," : leverage=" , lev)
     if amount[0]=='$':
         usdt=float(amount[1:len(amount)])
+        print("USDT>>",symbol, " : ",action," : amount=",usdt," : leverage=" , lev)
     if amount[0]=='%':
         percent= float(amount[1:len(amount)])
-    print(symbol, " : ",action," : amount=",amount," : leverage=" , lev)
+        print("Percent>>",symbol, " : ",action," : amount=",percent," : leverage=" , lev)
+    
     print('amount=',amount)
     print('fiat=',fiat)
     print('USDT=',usdt)
     print('Percent=',percent)
         
-    COIN = symbol[0:len(symbol)-4] 
+    
 
     bid = 0
     ask = 0
