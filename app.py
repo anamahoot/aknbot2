@@ -146,7 +146,7 @@ def webhook():
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])                
                 qty_close = round(usdt/ask,qty_precision)                
-                print("SELL/CloseLong by USDT amount=", usdt, ">> COIN", round(usdt*qty_close,3))
+                print("SELL/CloseLong by USDT amount=", usdt, ">> COIN", round(qty_close,3))
             print("CF>>", symbol,">>", action, ">> Qty=", qty_close, " ", COIN,">>USDT=", round(usdt,3))                    
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])            
             close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)
@@ -169,11 +169,11 @@ def webhook():
                 print("BUY/CloseShort by % amount=", qty_close, " ", COIN, ">> USDT=",round(usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])
-                qty_close = round(usdt/bid,qty_precision)
+                qty_close = round(usdt/bid,qty_precision)*-1
                 print("BUY/CloseShort by USDT amount=", usdt, ">> COIN", round(qty_close,3))
             print("CF>>", symbol,">>",action, ">>Qty=",qty_close, " ", COIN,">>USDT=", round(usdt,3))
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
-            close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)            
+            #close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)            
             #success close buy, push line notification        
             msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*ask*-1),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*ask*-1/lev),3)) + " USDT"
             r = requests.post(url, headers=headers, data = {'message':msg})
