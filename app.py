@@ -118,8 +118,7 @@ def webhook():
             print("SELL/SHORT by @ amount=", fiat, " ", COIN, ">> USDT=",round(usdt,3))
         if amount[0]=='$':
             usdt=float(amount[1:len(amount)])
-            #Qty_sell = usdt/ask
-            Qty_sell = usdt/bid
+            Qty_sell = usdt/ask            
             print("BUY by USDT amount=", usdt, ">> COIN", round(usdt,30))
         print("CF>>", symbol,">>", action, ">> Qty=", Qty_sell, " ", COIN,">>USDT=", round(usdt,3))
         Qty_sell = round(Qty_sell,qty_precision)
