@@ -42,7 +42,7 @@ def webhook():
     print("decoding data...")
     action = data['side']
     amount = data['amount']
-    symbol = data['ticker']
+    symbol = data['symbol']
     passphrase = data['passphrase']
     lev = data['leverage']
     #separate amount type
