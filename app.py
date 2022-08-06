@@ -50,6 +50,11 @@ def webhook():
     usdt=0
     percent=0
     
+    #trim PERT from symbol
+    if (symbol[len(symbol)-4:len(symbol)]) == "PERP":
+    symbol=symbol[0:len(symbol)-4]
+
+    
     COIN = symbol[0:len(symbol)-4] 
     
     if amount[0]=='@':
