@@ -84,12 +84,12 @@ def webhook():
         #check if buy in @ or fiat
         if amount[0]=='@':            
             fiat=float(amount[1:len(amount)])
-            Qty_buy=fiat
+            Qty_buy=round(fiat,qty_precision)
             usdt=round(fiat*bid,qty_precision)
             print("BUY/LONG by @ amount=", fiat, " ", COIN, ">> USDT=",round(usdt,3))
         if amount[0]=='$':
             usdt=float(amount[1:len(amount)])
-            Qty_buy = usdt/bid
+            Qty_buy = round(usdt/bid,qty_precision)
             print("BUY/LONG by USDT amount=", usdt, ">> COIN", round(usdt,30))
         print("CF>>", symbol,">>",action, ">>Qty=",Qty_buy, " ", COIN,">>USDT=", round(usdt,3))
         Qty_buy = round(Qty_buy,qty_precision)
@@ -111,12 +111,12 @@ def webhook():
         #check if sell in @ or fiat
         if amount[0]=='@':            
             fiat=float(amount[1:len(amount)])
-            Qty_sell=fiat
+            Qty_sell=round(fiat,qty_precision)
             usdt=round(fiat*ask,qty_precision)
             print("SELL/SHORT by @ amount=", fiat, " ", COIN, ">> USDT=",round(usdt,3))
         if amount[0]=='$':
             usdt=float(amount[1:len(amount)])
-            Qty_sell = usdt/ask            
+            Qty_sell = round(usdt/ask,qty_precision)
             print("SELL/SHORT by USDT amount=", usdt, ">> COIN", round(usdt,30))
         print("CF>>", symbol,">>", action, ">> Qty=", Qty_sell, " ", COIN,">>USDT=", round(usdt,3))
         Qty_sell = round(Qty_sell,qty_precision)
