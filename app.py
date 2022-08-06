@@ -134,26 +134,22 @@ def webhook():
         
     if action == "CloseLong":
         if posiAmt > 0.0 :
-     #       qty_precision = 0
-     #       for j in client.futures_exchange_info()['symbols']:
-     #           if j['symbol'] == symbol:
-     #               qty_precision = int(j['quantityPrecision'])
-     #       print("qty_precision",qty_precision)
+            qty_precision = 0
+            for j in client.futures_exchange_info()['symbols']:
+                if j['symbol'] == symbol:
+                    qty_precision = int(j['quantityPrecision'])
+            print("qty_precision",qty_precision)
             #check if sell in % or $
             if amount[0]=='%':            
-                #qty_close=round(posiAmt,qty_precision)
-                qty_close=posiAmt
-                #usdt=round(qty_close*ask,qty_precision)
-                usdt=qty_close*ask
+                qty_close=round(posiAmt,qty_precision)                
+                usdt=round(qty_close*ask,qty_precision)                
                 print("SELL/CloseLong by % amount=", qty_close, " ", COIN, ">> USDT=",round(usdt,3))
             if amount[0]=='$':
                 usdt=float(amount[1:len(amount)])                
-                #qty_close = round(usdt/ask,qty_precision)
-                qty_close = usdt/ask
+                qty_close = round(usdt/ask,qty_precision)                
                 print("SELL/CloseLong by USDT amount=", usdt, ">> COIN", round(usdt*qty_close,30))
             print("CF>>", symbol,">>", action, ">> Qty=", qty_close, " ", COIN,">>USDT=", round(usdt,3))                    
-            #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
-            
+            #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])            
             close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)
             #success close sell, push line notification        
             msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*bid),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*bid/lev),3)) + " USDT"
