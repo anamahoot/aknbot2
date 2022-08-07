@@ -175,8 +175,8 @@ def webhook():
                 print("SELL/CloseLong by USDT amount=", usdt, ">> COIN", round(qty_close,3))
             print("CF>>", symbol,">>", action, ">> Qty=", qty_close, " ", COIN,">>USDT=", round(usdt,3))                    
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
-            markP =float(client.futures_position_information(symbol=symbol)[0]['markPrice'])*posiAmt
-            entryP=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])*posiAmt
+            markP =float(client.futures_position_information(symbol=symbol)[0]['markPrice'])*qty_close
+            entryP=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])*qty_close
             profit=(markP-entryP)
             print("entry price=",entryP)
             print("mark price=",markP)
@@ -216,8 +216,8 @@ def webhook():
                 print("BUY/CloseShort by USDT amount=", usdt, ">> COIN", round(qty_close,3))
             print("CF>>", symbol,">>",action, ">>Qty=",qty_close, " ", COIN,">>USDT=", round(usdt,3))
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
-            markP =float(client.futures_position_information(symbol=symbol)[0]['markPrice'])*posiAmt
-            entryP=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])*posiAmt
+            markP =float(client.futures_position_information(symbol=symbol)[0]['markPrice'])*qty_close
+            entryP=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])*qty_close
             profit=(markP-entryP)
             print("entry price=",entryP)
             print("mark price=",markP)
