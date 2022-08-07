@@ -83,7 +83,7 @@ def webhook():
     min_balance=0
     
     #check USDT Balance
-    balance=client.futures_account_balance()[1]['balance']
+    balance=float(client.futures_account_balance()[1]['balance'])
     #print(FREEBALANCE[0])
     if FREEBALANCE[0]=='$':
         min_balance=float(FREEBALANCE[1:len(FREEBALANCE)])
