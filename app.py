@@ -50,6 +50,7 @@ def webhook():
     usdt=0
     percent=0
     
+    
     #trim PERT from symbol
     if (symbol[len(symbol)-4:len(symbol)]) == "PERP":
         symbol=symbol[0:len(symbol)-4]
@@ -78,6 +79,19 @@ def webhook():
     ask = 0
     usdt = float(usdt)
     lev = int(lev)
+    
+    min_balance=0
+    
+    #check USDT Balance
+    balance=client.futures_account_balance()[1]['balance']
+    #print(FREEBALANCE[0])
+    if FREEBALANCE[0]=='$':
+        min_balance=float(FREEBALANCE[1:len(FREEBALANCE)])
+        print("FREEBALANCE=",min_balance)
+    #Alertline if balance<min_balance
+    if balance<min_balance:            
+        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\n!!!WARNING!!!\nAccount Balance<"+ str(min_balance)+ " USDT"+"\nAccount Balance:"+ str(balance) + " USDT"
+        r = requests.post(url, headers=headers, data = {'message':msg})
     
     bid = float(client.futures_orderbook_ticker(symbol =symbol)['bidPrice'])
     ask = float(client.futures_orderbook_ticker(symbol =symbol)['askPrice'])
@@ -160,10 +174,27 @@ def webhook():
                 qty_close = round(usdt/ask,qty_precision)                
                 print("SELL/CloseLong by USDT amount=", usdt, ">> COIN", round(qty_close,3))
             print("CF>>", symbol,">>", action, ">> Qty=", qty_close, " ", COIN,">>USDT=", round(usdt,3))                    
-            #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])            
+            #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
+            markP =float(client.futures_position_information(symbol=symbol)[0]['markPrice'])*posiAmt
+            entryP=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])*posiAmt
+            profit=(markP-entryP)
+            print("entry price=",entryP)
+            print("mark price=",markP)
+            print("profit USDT=",profit)
+            unRealizedProfit = float(client.futures_position_information(symbol=symbol)[0]['unRealizedProfit'])  
+            print("unRealizedProfit=",unRealizedProfit)
+            #check leverage
+            leverage = float(client.futures_position_information(symbol=symbol)[0]['leverage'])  
+            print("leverage=",leverage)
+            margin=entryP/leverage
+            print("Enter margin=",margin)
+            ROI=100*unRealizedProfit/margin
+            print("ROI%=",ROI)
+            
+            
             close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)
             #success close sell, push line notification        
-            msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*bid),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*bid/lev),3)) + " USDT"
+            msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*bid),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive    :" + str(round((qty_close*bid/lev),3)) + " USDT" + "\nROI     :"+str(unRealizedProfit)+ " USDT"+"\nROI%    :"+str(ROI)
             r = requests.post(url, headers=headers, data = {'message':msg})
             print(symbol,": CloseLong")
 
@@ -185,9 +216,26 @@ def webhook():
                 print("BUY/CloseShort by USDT amount=", usdt, ">> COIN", round(qty_close,3))
             print("CF>>", symbol,">>",action, ">>Qty=",qty_close, " ", COIN,">>USDT=", round(usdt,3))
             #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
+            markP =float(client.futures_position_information(symbol=symbol)[0]['markPrice'])*posiAmt
+            entryP=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])*posiAmt
+            profit=(markP-entryP)
+            print("entry price=",entryP)
+            print("mark price=",markP)
+            print("profit USDT=",profit)
+            unRealizedProfit = float(client.futures_position_information(symbol=symbol)[0]['unRealizedProfit'])  
+            print("unRealizedProfit=",unRealizedProfit)
+            #check leverage
+            leverage = float(client.futures_position_information(symbol=symbol)[0]['leverage'])  
+            print("leverage=",leverage)
+            margin=entryP/leverage
+            print("Enter margin=",margin)
+            ROI=100*unRealizedProfit/margin
+            print("ROI%=",ROI)
+            
+            
             close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)            
             #success close buy, push line notification        
-            msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*ask*-1),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*ask*-1/lev),3)) + " USDT"
+            msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*ask*-1),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*ask*-1/lev),3)) + " USDT"+ "\nROI     :"+str(unRealizedProfit)+ " USDT"+"\nROI%    :"+str(ROI)
             r = requests.post(url, headers=headers, data = {'message':msg})
             print(symbol,": CloseShort")
             
