@@ -131,7 +131,9 @@ def webhook():
         print(symbol," : BUY")        
         time.sleep(1)
         #get entry price to find margin value
-        margin=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])*Qty_buy/lev
+        entryP=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])
+        print("entryP=",entryP)
+        margin=entryP*Qty_buy/lev
         #success openlong, push line notification        
         new_balance=float(client.futures_account_balance()[1][balance_key])
         print("Old Balance=",balance)
@@ -163,11 +165,14 @@ def webhook():
         print('qty sell : ',Qty_sell)
         client.futures_change_leverage(symbol=symbol,leverage=lev)
         print('leverage : ',lev)
+        
         order_SELL = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=Qty_sell)
         print(symbol,": SELL")
         time.sleep(1)
         #get entry price to find margin value
-        margin=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])*Qty_sell/lev
+        entryP=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])
+        print("entryP=",entryP)
+        margin=entryP*Qty_sell/lev
         #success openlong, push line notification        
         new_balance=float(client.futures_account_balance()[1][balance_key])
         print("Old Balance=",balance)
