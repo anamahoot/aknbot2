@@ -128,7 +128,7 @@ def webhook():
         time.sleep(1)
         #success openlong, push line notification        
         new_balance=float(client.futures_account_balance()[1]['balance'])
-        time.sleep(0.5)
+        time.sleep(1)
         paid=balance-new_balance
         #paid=usdt/lev
         msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(paid,3)) + " USDT"+ "\nBalance     :" + str(round(new_balance,3)) + " USDT"
