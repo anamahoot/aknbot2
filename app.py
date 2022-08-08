@@ -139,7 +139,7 @@ def webhook():
         print("New Balance=",new_balance)
         paid=balance-new_balance
         #paid=usdt/lev
-        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) +"\nMargin  :" + str(round(margin,2)+  " USDT"+ "\nPaid        :" + str(round(paid,2)) + " USDT"+ "\nBalance     :" + str(round(new_balance,2)) + " USDT"
+        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) +"\nMargin  :" + str(round(margin,2))+  " USDT"+ "\nPaid        :" + str(round(paid,2)) + " USDT"+ "\nBalance     :" + str(round(new_balance,2)) + " USDT"
         r = requests.post(url, headers=headers, data = {'message':msg})
         
     #OpenShort/SELL
