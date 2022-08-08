@@ -64,7 +64,9 @@ def webhook():
         "code" : "fail",
         "message" : data
         }
-
+    print("Valid SECRET KEY/PASSPHRASE")
+    data = client.futures_get_position_mode()
+    print("Position mode: Hedge Mode" if data['dualSidePosition'] == True else "Position mode: OneWay Mode")
               
     
     #trim PERT from symbol
