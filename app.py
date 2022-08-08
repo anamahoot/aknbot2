@@ -57,6 +57,16 @@ def webhook():
     usdt=0
     percent=0    
     
+    #check if secretkey is valie
+    if passphrase != SECRET_KEY
+        print("Invalid SECRET KEY/PASSPHRASE"
+        return {
+        "code" : "fail",
+        "message" : data
+        }
+
+              
+    
     #trim PERT from symbol
     if (symbol[len(symbol)-4:len(symbol)]) == "PERP":
         symbol=symbol[0:len(symbol)-4]
