@@ -34,7 +34,8 @@ BOT_NAME=str(os.environ['BOT_NAME'])
 FREEBALANCE=str(os.environ['FREEBALANCE'])
 SECRET_KEY=str(os.environ['SECRET_KEY'])
 
-client = Client(API_KEY,API_SECRET,testnet=TEST_NET,base_url="https://fapi.binance.com")
+#client = Client(API_KEY,API_SECRET,testnet=TEST_NET,base_url="https://fapi.binance.com")
+client = Client(API_KEY,API_SECRET,testnet=TEST_NET)
 
 url = 'https://notify-api.line.me/api/notify'
 headers = {'content-type':'application/x-www-form-urlencoded','Authorization':'Bearer '+LINE_TOKEN}
