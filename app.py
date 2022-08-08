@@ -102,6 +102,7 @@ def webhook():
         
     #List of action OpenLong=BUY, OpenShort=SELL, StopLossLong, StopLossShort, CloseLong=LongTP, CloseShort=ShortTP, CloseLong, CloseShort, 
     #OpenLong/BUY    
+    new_balance=0
     #if action == "OpenLong" and usdt>0:
     if action == "OpenLong" :
         qty_precision = 0
@@ -129,6 +130,8 @@ def webhook():
         #success openlong, push line notification        
         new_balance=float(client.futures_account_balance()[1]['balance'])
         time.sleep(1)
+        print("Old Balance=",balance)
+        print("New Balance=",new_balance)
         paid=balance-new_balance
         #paid=usdt/lev
         msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(paid,3)) + " USDT"+ "\nBalance     :" + str(round(new_balance,3)) + " USDT"
