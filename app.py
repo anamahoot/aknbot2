@@ -216,7 +216,7 @@ def webhook():
             elif ROI<100:
                 ROI=round(ROI_val-100,2)            
             print("Margin ROI%=",ROI)
-            msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*bid),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive    :" + str(round(profit,2)) + " USDT" + "\nROI           :"+ str(round(ROI,2)) + "%"+"\nBalance   :" + str(round(new_balance,2)) + " USDT"
+            msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*ask),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive    :" + str(round(profit,2)) + " USDT" + "\nROI           :"+ str(round(ROI,2)) + "%"+"\nBalance   :" + str(round(new_balance,2)) + " USDT"
             r = requests.post(url, headers=headers, data = {'message':msg})
             print(symbol,": CloseLong")
 
@@ -237,26 +237,25 @@ def webhook():
                 qty_close = -1*round(usdt/bid,qty_precision)
                 print("BUY/CloseShort by USDT amount=", usdt, ">> COIN", round(qty_close,3))
             print("CF>>", symbol,">>",action, ">>Qty=",qty_close, " ", COIN,">>USDT=", round(usdt,3))
-            #qty_close = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
-            markP =float(client.futures_position_information(symbol=symbol)[0]['markPrice'])*qty_close
+            leverage = float(client.futures_position_information(symbol=symbol)[0]['leverage'])              
             entryP=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])*qty_close
-            profit=(markP-entryP)
-            print("entry price=",entryP)
-            print("mark price=",markP)
-            print("profit USDT=",profit)
-            unRealizedProfit = float(client.futures_position_information(symbol=symbol)[0]['unRealizedProfit'])  
-            print("unRealizedProfit=",unRealizedProfit)
-            #check leverage
-            leverage = float(client.futures_position_information(symbol=symbol)[0]['leverage'])  
-            print("leverage=",leverage)
-            margin=entryP/leverage
-            print("Enter margin=",margin)
-            ROI=100*unRealizedProfit/margin
-            print("ROI%=",ROI)           
-            
-            close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)            
+            close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)                        
+            time.sleep(1)    
+            #success close sell, push line notification                    
+            new_balance=float(client.futures_account_balance()[1][balance_key])
+            profit = new_balance-balance
+            margin=-1*entryP/leverage
+            ROI_val=100*profit/margin 
+            ROI=0
+            if ROI>=100:
+                ROI=round(100-ROI_val,2)
+            elif ROI<100:
+                ROI=round(ROI_val-100,2)            
+            print("Margin ROI%=",ROI)            
             #success close buy, push line notification        
-            msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*ask*-1),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*ask*-1/lev),3)) + " USDT"+ "\nROI     :"+str(unRealizedProfit)+ " USDT"+"\nROI%    :"+str(ROI)
+            #msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*ask*-1),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*ask*-1/lev),3)) + " USDT"+ "\nROI     :"+str(unRealizedProfit)+ " USDT"+"\nROI%    :"+str(ROI)
+            #msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*bid*-1),3))+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*bid*-1/lev),3)) + " USDT"+ "\nROI     :"+str(unRealizedProfit)+ " USDT"+"\nROI%    :"+str(ROI)
+            msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*bid),3))+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive    :" + str(round(profit,2)) + " USDT" + "\nROI           :"+ str(round(ROI,2)) + "%"+"\nBalance   :" + str(round(new_balance,2)) + " USDT"
             r = requests.post(url, headers=headers, data = {'message':msg})
             print(symbol,": CloseShort")
             
