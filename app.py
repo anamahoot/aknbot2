@@ -41,7 +41,7 @@ headers = {'content-type':'application/x-www-form-urlencoded','Authorization':'B
 
 @app.route("/")
 def hello_world():
-    return "DR.AKN BOT"
+    return BOT_NAME
 
 @app.route("/webhook", methods=['POST'])
 def webhook():
