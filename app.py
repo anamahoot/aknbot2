@@ -1,4 +1,5 @@
 import json
+import time
 from flask import Flask, request
 from binance.client import Client
 from binance.enums import *
@@ -122,10 +123,12 @@ def webhook():
         print('qty buy : ',Qty_buy)
         client.futures_change_leverage(symbol=symbol,leverage=lev) 
         print('leverage : ',lev)
-        order_BUY = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=Qty_buy)
+        order_BUY = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=Qty_buy)        
         print(symbol," : BUY")
+        time.sleep(1)
         #success openlong, push line notification        
         new_balance=float(client.futures_account_balance()[1]['balance'])
+        time.sleep(0.5)
         paid=balance-new_balance
         #paid=usdt/lev
         msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(paid,3)) + " USDT"+ "\nBalance     :" + str(round(new_balance,3)) + " USDT"
