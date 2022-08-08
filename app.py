@@ -209,11 +209,12 @@ def webhook():
             new_balance=float(client.futures_account_balance()[1][balance_key])
             profit = new_balance-balance
             margin=entryP/leverage
-            ROI=100*profit/margin            
+            ROI_val=100*profit/margin 
+            if ROI_val>=100:
+                ROI=float(100-ROI_val,2)
+            elif ROI_val<100:
+                ROI=float(ROI_val-100,2)
             print("Margin ROI%=",ROI)
-            print("Actual ROI%=",ROI)
-            
-            #msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*bid),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive    :" + str(round((qty_close*bid/lev),3)) + " USDT" + "\nROI     :"+str(profit)+ " USDT"+"\nROI%    :"+str(ROI)
             msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SELL]" + "\nAmount  :" + str(qty_close) + " "+  COIN +"/"+str(round((qty_close*bid),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive    :" + str(round(profit,2)) + " USDT" + "\nROI%    :"+ str(round(ROI,2)) + "\nBalance   :" + str(round(new_balance,2)) + " USDT"
             r = requests.post(url, headers=headers, data = {'message':msg})
             print(symbol,": CloseLong")
