@@ -125,7 +125,10 @@ def webhook():
         order_BUY = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=Qty_buy)
         print(symbol," : BUY")
         #success openlong, push line notification        
-        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(usdt/lev,3)) + " USDT"
+        new_balance=float(client.futures_account_balance()[1]['balance'])
+        paid=balance-new_balance
+        #paid=usdt/lev
+        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(paid,3)) + " USDT"++ "\nBalance     :" + str(round(new_balance,3)) + " USDT"
         r = requests.post(url, headers=headers, data = {'message':msg})
         
     #OpenShort/SELL
@@ -152,8 +155,11 @@ def webhook():
         print('leverage : ',lev)
         order_SELL = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=Qty_sell)
         print(symbol,": SELL")
+        new_balance=float(client.futures_account_balance()[1]['balance'])
+        paid=balance-new_balance
+        #paid=usdt/lev
         #success openshort, push line notification        
-        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SHORT]" + "\nAmount  :" + str(Qty_sell) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(usdt/lev,3)) + " USDT"
+        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[SHORT]" + "\nAmount  :" + str(Qty_sell) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(paid,3)) + " USDT" + "\nBalance     :" + str(round(new_balance,3)) + " USDT"
         r = requests.post(url, headers=headers, data = {'message':msg})
 
         
