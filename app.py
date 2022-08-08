@@ -216,13 +216,12 @@ def webhook():
             leverage = float(client.futures_position_information(symbol=symbol)[0]['leverage'])  
           # print("leverage=",leverage)
             margin=entryP/leverage
-            #get balance again
-            
+            #get balance again          
             
             
             close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)
-            #success close sell, push line notification        
-            new_balance=float(client.futures_account_balance()[1]['balance'])
+            #success close sell, push line notification                    
+            new_balance=float(client.futures_account_balance()[1][balance_key])            
             profit = new_balance-balance
            # print("Enter margin=",margin)
             ROI=100*profit/margin
@@ -263,8 +262,7 @@ def webhook():
             margin=entryP/leverage
             print("Enter margin=",margin)
             ROI=100*unRealizedProfit/margin
-            print("ROI%=",ROI)
-            
+            print("ROI%=",ROI)           
             
             close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)            
             #success close buy, push line notification        
