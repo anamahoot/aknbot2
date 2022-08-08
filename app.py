@@ -4,14 +4,14 @@
 #CloseLong_amt  ='%100'
 #CloseShort_amt = '%100'
 #passphrase ="1234"
-#string Alert_OpenLong       ='{"side": "OpenLong", "amount": "@'+str.tostring(lotsbull)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
-#string Alert_OpenShort      ='{"side": "OpenShort", "amount": "@'+str.tostring(lotsbear)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
-#string Alert_LongTP         ='{"side": "CloseLong", "amount": "%'+str.tostring(TPper)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
-#string Alert_ShortTP        ='{"side": "CloseShort", "amount": "%'+str.tostring(TPper)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
-#var message_closelong       ='{"side": "CloseLong", "amount": "'+CloseLong_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
-#var message_closeshort      ='{"side": "CloseShort", "amount": "'+CloseShort_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
-#string Alert_StopLosslong   ='{"side": "CloseLong", "amount": "'+CloseLong_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
-#string Alert_StopLossshort  = '{"side": "CloseShort", "amount": "'+CloseShort_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
+#string Alert_OpenLong       ='{"side": "OpenLong", "amount": "@'+str.tostring(lotsbull)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
+#string Alert_OpenShort      ='{"side": "OpenShort", "amount": "@'+str.tostring(lotsbear)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
+#string Alert_LongTP         ='{"side": "CloseLong", "amount": "%'+str.tostring(TPper)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
+#string Alert_ShortTP        ='{"side": "CloseShort", "amount": "%'+str.tostring(TPper)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
+#var message_closelong       ='{"side": "CloseLong", "amount": "'+CloseLong_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
+#var message_closeshort      ='{"side": "CloseShort", "amount": "'+CloseShort_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
+#string Alert_StopLosslong   ='{"side": "CloseLong", "amount": "'+CloseLong_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
+#string Alert_StopLossshort  = '{"side": "CloseShort", "amount": "'+CloseShort_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
 
 #mod and dev by DR.AKN
 
@@ -57,7 +57,7 @@ def webhook():
     usdt=0
     percent=0    
     
-    #check if secretkey is valie
+    #check if secretkey is valid
     if passphrase != SECRET_KEY:
         print("Invalid SECRET KEY/PASSPHRASE")
         return {
