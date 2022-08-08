@@ -84,7 +84,10 @@ def webhook():
     min_balance=0
     
     #check USDT Balance
-    balance=float(client.futures_account_balance()[1]['balance'])
+    #balance_key='balance'
+    balance_key='withdrawAvailable'    
+    balance=float(client.futures_account_balance()[1]['balance_key'])
+    
     #print(FREEBALANCE[0])
     if FREEBALANCE[0]=='$':
         min_balance=float(FREEBALANCE[1:len(FREEBALANCE)])
@@ -128,7 +131,7 @@ def webhook():
         print(symbol," : BUY")
         time.sleep(1)
         #success openlong, push line notification        
-        new_balance=float(client.futures_account_balance()[1]['balance'])
+        new_balance=float(client.futures_account_balance()[1]['balance_key'])
         time.sleep(1)
         print("Old Balance=",balance)
         print("New Balance=",new_balance)
@@ -161,7 +164,7 @@ def webhook():
         print('leverage : ',lev)
         order_SELL = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=Qty_sell)
         print(symbol,": SELL")
-        new_balance=float(client.futures_account_balance()[1]['balance'])
+        new_balance=float(client.futures_account_balance()[1]['balance_key'])
         paid=balance-new_balance
         #paid=usdt/lev
         #success openshort, push line notification        
