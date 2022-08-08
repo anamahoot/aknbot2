@@ -128,7 +128,7 @@ def webhook():
         new_balance=float(client.futures_account_balance()[1]['balance'])
         paid=balance-new_balance
         #paid=usdt/lev
-        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(paid,3)) + " USDT"++ "\nBalance     :" + str(round(new_balance,3)) + " USDT"
+        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(paid,3)) + " USDT"+ "\nBalance     :" + str(round(new_balance,3)) + " USDT"
         r = requests.post(url, headers=headers, data = {'message':msg})
         
     #OpenShort/SELL
