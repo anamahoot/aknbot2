@@ -59,7 +59,7 @@ def webhook():
     
     #check if secretkey is valie
     if passphrase != SECRET_KEY:
-        print("Invalid SECRET KEY/PASSPHRASE"
+        print("Invalid SECRET KEY/PASSPHRASE")
         return {
         "code" : "fail",
         "message" : data
