@@ -128,16 +128,18 @@ def webhook():
         client.futures_change_leverage(symbol=symbol,leverage=lev) 
         print('leverage : ',lev)
         order_BUY = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=Qty_buy)        
-        print(symbol," : BUY")
+        print(symbol," : BUY")        
         time.sleep(1)
+        #get entry price to find margin value
+        margin=float(client.futures_position_information(symbol=symbol)[0]['entryPrice'])*Qty_buy/lev
         #success openlong, push line notification        
         new_balance=float(client.futures_account_balance()[1][balance_key])
-        time.sleep(1)
+        time.sleep(1)        
         print("Old Balance=",balance)
         print("New Balance=",new_balance)
         paid=balance-new_balance
         #paid=usdt/lev
-        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(paid,3)) + " USDT"+ "\nBalance     :" + str(round(new_balance,3)) + " USDT"
+        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(Qty_buy) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) +"\nMargin  :" + str(round(margin,2)+  " USDT"+ "\nPaid        :" + str(round(paid,2)) + " USDT"+ "\nBalance     :" + str(round(new_balance,2)) + " USDT"
         r = requests.post(url, headers=headers, data = {'message':msg})
         
     #OpenShort/SELL
