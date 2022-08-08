@@ -1,3 +1,21 @@
+#the following is the cryto trade bot and compatible with the follwing strategy message
+#var string bar1 = '════════ Password and Leverage ════════'
+#leverage                = input.string("20",group=bar1)
+#CloseLong_amt  ='%100'
+#CloseShort_amt = '%100'
+#passphrase ="1234"
+#string Alert_OpenLong       ='{"side": "OpenLong", "amount": "@'+str.tostring(lotsbull)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
+#string Alert_OpenShort      ='{"side": "OpenShort", "amount": "@'+str.tostring(lotsbear)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
+#string Alert_LongTP         ='{"side": "CloseLong", "amount": "%'+str.tostring(TPper)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
+#string Alert_ShortTP        ='{"side": "CloseShort", "amount": "%'+str.tostring(TPper)+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
+#var message_closelong       ='{"side": "CloseLong", "amount": "'+CloseLong_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
+#var message_closeshort      ='{"side": "CloseShort", "amount": "'+CloseShort_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
+#string Alert_StopLosslong   ='{"side": "CloseLong", "amount": "'+CloseLong_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
+#string Alert_StopLossshort  = '{"side": "CloseShort", "amount": "'+CloseShort_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'"+"leverage":"'+leverage+'"}'
+
+#mod and dev by DR.AKN
+
+#feature
 import json
 import time
 from flask import Flask, request
@@ -18,24 +36,12 @@ SECRET_KEY=str(os.environ['SECRET_KEY'])
 
 client = Client(API_KEY,API_SECRET,testnet=TEST_NET)
 
-#STATIC API for testnet
-#API_KEY = '3ebbe4c386be6fd911894b3b0b72c6f2026959e47e74ed9aa0ff8f676a04a9c3'
-#API_SECRET = '4b060561fddd153b5367614e8427bb5fd2a5b312f1dc2fff830278ddf36ed18a'
-#client = Client(API_KEY,API_SECRET,testnet=True)
-
-
 url = 'https://notify-api.line.me/api/notify'
 headers = {'content-type':'application/x-www-form-urlencoded','Authorization':'Bearer '+LINE_TOKEN}
-#msg = 'Hello LINE Notify'
-#r = requests.post(url, headers=headers, data = {'message':msg})
-#print (r.text)
-
-#print(API_KEY)
-#print(API_SECRET)
 
 @app.route("/")
 def hello_world():
-    return "AKNB2"
+    return "DR.AKN BOT"
 
 @app.route("/webhook", methods=['POST'])
 def webhook():
@@ -49,13 +55,11 @@ def webhook():
     #separate amount type
     fiat=0
     usdt=0
-    percent=0
-    
+    percent=0    
     
     #trim PERT from symbol
     if (symbol[len(symbol)-4:len(symbol)]) == "PERP":
         symbol=symbol[0:len(symbol)-4]
-
     
     COIN = symbol[0:len(symbol)-4] 
     
@@ -72,8 +76,7 @@ def webhook():
     print('amount=',amount)
     print('fiat=',fiat)
     print('USDT=',usdt)
-    print('Percent=',percent)
-        
+    print('Percent=',percent)      
     
 
     bid = 0
@@ -179,7 +182,6 @@ def webhook():
         print("New Balance=",new_balance)
         paid=balance-new_balance        #paid=usdt/lev
         #success openshort, push line notification        
-#        msg ="BINANCE:\n" + "BOT        :" + BOT_NAME + "\nCoin        :" + COIN + "/USDT" + "\nStatus     :" + action + "[SHORT]" + "\nAmount  :" + str(Qty_sell) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nPaid        :" + str(round(paid,3)) + " USDT" + "\nBalance     :" + str(round(new_balance,3)) + " USDT"
         msg ="BINANCE:\n" + "BOT        :" + BOT_NAME + "\nCoin        :" + COIN + "/USDT" + "\nStatus     :" + action + "[SHORT]" + "\nAmount  :" + str(Qty_sell) + " "+  COIN +"/"+str(usdt)+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) +"\nMargin   :" + str(round(margin,2))+  " USDT"+ "\nPaid        :" + str(round(paid,2)) + " USDT"+ "\nBalance   :" + str(round(new_balance,2)) + " USDT"
         r = requests.post(url, headers=headers, data = {'message':msg})
 
@@ -252,9 +254,7 @@ def webhook():
             elif ROI<100:
                 ROI=round(ROI_val-100,2)            
             print("Margin ROI%=",ROI)            
-            #success close buy, push line notification        
-            #msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*ask*-1),3))+" USDT" + "\nPrice       :" + str(ask) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*ask*-1/lev),3)) + " USDT"+ "\nROI     :"+str(unRealizedProfit)+ " USDT"+"\nROI%    :"+str(ROI)
-            #msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*bid*-1),3))+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive     :" + str(round((qty_close*bid*-1/lev),3)) + " USDT"+ "\nROI     :"+str(unRealizedProfit)+ " USDT"+"\nROI%    :"+str(ROI)
+            #success close buy, push line notification                    
             msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nCoin       :" + COIN + "/USDT" + "\nStatus    :" + action + "[BUY]" + "\nAmount  :" + str(qty_close*-1) + " "+  COIN +"/"+str(round((qty_close*bid*-1),2))+" USDT" + "\nPrice       :" + str(bid) + " USDT" + "\nLeverage:" + str(lev) + "\nReceive    :" + str(round(profit,2)) + " USDT" + "\nROI           :"+ str(round(ROI,2)) + "%"+"\nBalance   :" + str(round(new_balance,2)) + " USDT"
             r = requests.post(url, headers=headers, data = {'message':msg})
             print(symbol,": CloseShort")
