@@ -28,7 +28,7 @@ app = Flask(__name__)
 
 API_KEY = str(os.environ['API_KEY'])
 API_SECRET = str(os.environ['API_SECRET'])
-TEST_NET = bool(str(os.environ['TEST_NET']))
+#TEST_NET = bool(str(os.environ['TEST_NET']))
 LINE_TOKEN=str(os.environ['LINE_TOKEN'])
 BOT_NAME=str(os.environ['BOT_NAME'])
 FREEBALANCE=str(os.environ['FREEBALANCE'])
