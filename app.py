@@ -17,6 +17,7 @@
 
 #feature
 import json
+import sys
 import time
 from flask import Flask, request
 from binance.client import Client
@@ -105,9 +106,14 @@ def webhook():
     
     min_balance=0
     print('show balance list')
-    print(client.futures_account_balance())
+    balance_string=json.loads(client.futures_account_balance())
+    for i in balance_string['emp_details']:
+        print(i)
+    
+    #print(client.futures_account_balance())
     #check USDT Balance
     #balance_key='balance'
+    #balance_index=
     balance_key='withdrawAvailable'    
     balance=float(client.futures_account_balance()[1][balance_key])
     
