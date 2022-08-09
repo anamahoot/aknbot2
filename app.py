@@ -33,6 +33,8 @@ LINE_TOKEN=str(os.environ['LINE_TOKEN'])
 BOT_NAME=str(os.environ['BOT_NAME'])
 FREEBALANCE=str(os.environ['FREEBALANCE'])
 SECRET_KEY=str(os.environ['SECRET_KEY'])
+ORDER_ENABLE=str(os.environ['ORDER_ENABLE'])
+#set order enable = FALSE in vars when want to test nonorder api cmd./TRUE for normal operation
 
 #client = Client(API_KEY,API_SECRET,testnet=TEST_NET)
 client = Client(API_KEY,API_SECRET)
@@ -48,7 +50,11 @@ def hello_world():
 def webhook():
     data = json.loads(request.data)
     print("decoding data...")
-    action = data['side']
+    if ORDER_ENABLE='TRUE':
+        action = data['side']
+    else:
+        action = 'maintenance mode'
+    
     amount = data['amount']
     symbol = data['symbol']
     passphrase = data['passphrase']
@@ -98,6 +104,7 @@ def webhook():
     lev = int(lev)
     
     min_balance=0
+    print('show balance list')
     print(client.futures_account_balance())
     #check USDT Balance
     #balance_key='balance'
