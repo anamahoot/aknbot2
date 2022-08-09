@@ -98,7 +98,7 @@ def webhook():
     lev = int(lev)
     
     min_balance=0
-    
+    print(client.futures_account_balance())
     #check USDT Balance
     #balance_key='balance'
     balance_key='withdrawAvailable'    
