@@ -106,16 +106,22 @@ def webhook():
     
     min_balance=0
     print('show balance list')
-    balance_string=json.loads(client.futures_account_balance())
-    for i in balance_string['emp_details']:
-        print(i)
-    
-    #print(client.futures_account_balance())
     #check USDT Balance
-    #balance_key='balance'
-    #balance_index=
+    balance_index=0
+    balance_list=client.futures_account_balance()
+    print(len(balance_list))
+    print("Bal list=",balance_list[9])
+    for i in range(0,(len(balance_list)-1),1):    
+        #print("asset=",balance_list[i]['asset'])
+        if balance_list[i]['asset']==COIN:
+            balance_index=i
+            break
+
     balance_key='withdrawAvailable'    
-    balance=float(client.futures_account_balance()[1][balance_key])
+    balance=float(client.futures_account_balance()[balance_index][balance_key])        
+    print(COIN, " Balance=",balance)
+    balance_key='withdrawAvailable'    
+    balance=float(client.futures_account_balance()[balance_index][balance_key])
     
     #print(FREEBALANCE[0])
     if FREEBALANCE[0]=='$':
@@ -164,7 +170,7 @@ def webhook():
         print("entryP=",entryP)
         margin=entryP*Qty_buy/lev
         #success openlong, push line notification        
-        new_balance=float(client.futures_account_balance()[1][balance_key])
+        new_balance=float(client.futures_account_balance()[balance_index][balance_key])
         print("Old Balance=",balance)
         print("New Balance=",new_balance)
         paid=balance-new_balance
@@ -203,7 +209,7 @@ def webhook():
         print("entryP=",entryP)
         margin=entryP*Qty_sell/lev
         #success openlong, push line notification        
-        new_balance=float(client.futures_account_balance()[1][balance_key])
+        new_balance=float(client.futures_account_balance()[balance_index][balance_key])
         print("Old Balance=",balance)
         print("New Balance=",new_balance)
         paid=balance-new_balance        #paid=usdt/lev
@@ -234,7 +240,7 @@ def webhook():
             close_BUY = client.futures_create_order(symbol=symbol, side='SELL', type='MARKET', quantity=qty_close)            
             time.sleep(1)
             #success close sell, push line notification                    
-            new_balance=float(client.futures_account_balance()[1][balance_key])
+            new_balance=float(client.futures_account_balance()[balance_index][balance_key])
             profit = new_balance-balance
             margin=entryP/leverage
             ROI_val=100*profit/margin 
@@ -270,7 +276,7 @@ def webhook():
             close_SELL = client.futures_create_order(symbol=symbol, side='BUY', type='MARKET', quantity=qty_close*-1)                        
             time.sleep(1)    
             #success close sell, push line notification                    
-            new_balance=float(client.futures_account_balance()[1][balance_key])
+            new_balance=float(client.futures_account_balance()[balance_index][balance_key])
             profit = new_balance-balance
             margin=-1*entryP/leverage
             ROI_val=100*profit/margin 
