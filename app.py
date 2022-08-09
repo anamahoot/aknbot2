@@ -50,7 +50,7 @@ def hello_world():
 def webhook():
     data = json.loads(request.data)
     print("decoding data...")
-    if ORDER_ENABLE='TRUE':
+    if ORDER_ENABLE=='TRUE':
         action = data['side']
     else:
         action = 'maintenance mode'
