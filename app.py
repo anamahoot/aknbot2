@@ -110,16 +110,16 @@ def webhook():
     balance_index=0
     balance_list=client.futures_account_balance()
     print(len(balance_list))
-    print("Bal list=",balance_list[9])
     for i in range(0,(len(balance_list)-1),1):    
         #print("asset=",balance_list[i]['asset'])
-        if balance_list[i]['asset']==COIN:
+        if balance_list[i]['asset']=='USDT':
             balance_index=i
             break
-
+    print("Balance list=",balance_list[balance_index])
     balance_key='withdrawAvailable'    
     balance=float(client.futures_account_balance()[balance_index][balance_key])        
-    print(COIN, " Balance=",balance)
+    
+    print("USDT Balance=",balance)
     balance_key='withdrawAvailable'    
     balance=float(client.futures_account_balance()[balance_index][balance_key])
     
