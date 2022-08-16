@@ -157,6 +157,7 @@ def webhook():
                 print("asset=",account_list[i]['symbol'])
                 print("User Binance Leverage: lev=",lev)
             break
+    print("Use leverage=",lev)        
     #List of action OpenLong=BUY, OpenShort=SELL, StopLossLong, StopLossShort, CloseLong=LongTP, CloseShort=ShortTP, CloseLong, CloseShort, 
     #OpenLong/BUY    
     new_balance=0
