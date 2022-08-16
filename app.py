@@ -105,7 +105,7 @@ def webhook():
     bid = 0
     ask = 0
     usdt = float(usdt)
-    #lev = int(lev)
+    lev = int(lev)
     
     min_balance=0
     print('show balance list')
@@ -144,7 +144,7 @@ def webhook():
     #prepare the right leverage
     if LEVERAGE_ENABLE=='TRUE':
         #force leverage
-        lev = int(data['leverage'])
+        #lev = int(data['leverage'])
         print("Use Forced Leverage: lev=",lev)
     else:
         #get current margin from binance
