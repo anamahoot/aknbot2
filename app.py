@@ -155,8 +155,7 @@ def webhook():
             if account_list[i]['symbol']==symbol:    
                 lev=int(account_list[i]['leverage'])
                 print("asset=",account_list[i]['symbol'])
-                print("User Binance Leverage: lev=",lev)
-                print("i=",i)
+                print("User Binance Leverage: lev=",lev)                
                 break
     
     #List of action OpenLong=BUY, OpenShort=SELL, StopLossLong, StopLossShort, CloseLong=LongTP, CloseShort=ShortTP, CloseLong, CloseShort, 
