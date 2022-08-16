@@ -72,7 +72,7 @@ def webhook():
     if passphrase != SECRET_KEY:
         print("Invalid SECRET KEY/PASSPHRASE")
         return {
-        "code" : "fail",
+        "code" : "invalid secret key-exit trade",
         "message" : data
         }
     print("Valid SECRET KEY/PASSPHRASE")
