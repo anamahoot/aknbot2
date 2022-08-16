@@ -56,8 +56,10 @@ def webhook():
     print("decoding data...")
     if ORDER_ENABLE=='TRUE':
         action = data['side']
+        print("Excute buy/sell normally")
     else:
         action = 'maintenance mode'
+        print("Not Excute buy/sell normally: you are in coding maintenance mode, change vars from ORDER_ENABLE from FASLE to TRUE")
     
     amount = data['amount']
     symbol = data['symbol']
