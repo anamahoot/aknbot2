@@ -105,7 +105,7 @@ def webhook():
     bid = 0
     ask = 0
     usdt = float(usdt)
-    lev = int(lev)
+    #lev = int(lev)
     
     min_balance=0
     print('show balance list')
@@ -140,7 +140,21 @@ def webhook():
         
     posiAmt = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
     print("100% Position amount>>",float(client.futures_position_information(symbol=symbol)[0]['positionAmt']))
-        
+    
+    #prepare the right leverage
+    if LEVERAGE_ENABLE=='TRUE':
+        #force leverage
+        lev = int(data['leverage'])
+        print("Use Forced Leverage: lev=",lev)
+    else:
+        #get current margin from binance
+        account_list=client.futures_account()['positions']
+        for i in range(0,(len(account_list)-1),1):      
+            if account_list[i]['symbol']==symbol:    
+                lev=int(account_list[i]['leverage'])
+                print("asset=",account_list[i]['symbol'])
+                print("User Binance Leverage: lev=",lev)
+            break
     #List of action OpenLong=BUY, OpenShort=SELL, StopLossLong, StopLossShort, CloseLong=LongTP, CloseShort=ShortTP, CloseLong, CloseShort, 
     #OpenLong/BUY    
     new_balance=0
