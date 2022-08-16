@@ -142,7 +142,7 @@ def webhook():
         
     posiAmt = float(client.futures_position_information(symbol=symbol)[0]['positionAmt'])
     print("100% Position amount>>",float(client.futures_position_information(symbol=symbol)[0]['positionAmt']))
-    
+    print("Current symbol:",symbol)
     #prepare the right leverage
     if LEVERAGE_ENABLE=='TRUE':
         #force leverage
