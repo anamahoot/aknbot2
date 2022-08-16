@@ -14,6 +14,7 @@
 #string Alert_StopLossshort  = '{"side": "CloseShort", "amount": "'+CloseShort_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
 
 #mod and dev by DR.AKN
+# anamahoot@gmail.com
 
 #feature
 import json
@@ -35,6 +36,8 @@ BOT_NAME=str(os.environ['BOT_NAME'])
 FREEBALANCE=str(os.environ['FREEBALANCE'])
 SECRET_KEY=str(os.environ['SECRET_KEY'])
 ORDER_ENABLE=str(os.environ['ORDER_ENABLE'])
+LEVERAGE_ENABLE=str(os.environ['LEVERAGE_ENABLE'])
+
 #set order enable = FALSE in vars when want to test nonorder api cmd./TRUE for normal operation
 
 #client = Client(API_KEY,API_SECRET,testnet=TEST_NET)
