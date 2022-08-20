@@ -26,6 +26,7 @@
 #BOT deployment VDO https://youtu.be/-4gHb5PiC2I
 #example TV alert
 #https://www.tradingview.com/script/20I6LbIk-VXD-Bot2-5-AVAXUSDTPERP-TF15m/
+#keep alive heroku web: http://kaffeine.herokuapp.com/
 
 #mod and dev by DR.AKN
 # anamahoot@gmail.com
@@ -326,7 +327,8 @@ def webhook():
             print(symbol,": CloseShort")
             
     if action == "test":
-        print("TEST!")
+        print("Acknowledge test command: If you see this message, your bot is working properly.")
+        print("Your current USDT balance is ", balance)
         msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nTest.."
         r = requests.post(url, headers=headers, data = {'message':msg})        
     
