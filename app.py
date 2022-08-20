@@ -13,6 +13,20 @@
 #string Alert_StopLosslong   ='{"side": "CloseLong", "amount": "'+CloseLong_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
 #string Alert_StopLossshort  = '{"side": "CloseShort", "amount": "'+CloseShort_amt+'", "symbol": "{{ticker}}", "passphrase": "'+passphrase+'","leverage":"'+leverage+'"}'
 
+# Don't forget to read README
+# in Heroku, you must add the following VARS
+#API_KEY=Binance API Key 
+#API_SECRET=Binance API Secret  
+#BOT_NAME= Your Robo Name
+#FREBALABCE= $xxx minimum USDT to run bot 
+#LEVERAGE_ENABLE=TRUE , TRUE to enable forced leverage from TV, FALSE to use default value from Binance
+#LINE_TOKEN= https://line.notify token
+#ORDER_ENABLE=TRUE
+#SECRET_KEY=1234 security key from TV
+#BOT deployment VDO https://youtu.be/-4gHb5PiC2I
+#example TV alert
+#https://www.tradingview.com/script/20I6LbIk-VXD-Bot2-5-AVAXUSDTPERP-TF15m/
+
 #mod and dev by DR.AKN
 # anamahoot@gmail.com
 
