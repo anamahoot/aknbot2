@@ -329,7 +329,7 @@ def webhook():
     if action == "test":
         print("Acknowledge test command: If you see this message, your bot is working properly.")
         print("Your current USDT balance is ", round(balance,2))
-        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nTest message has been excuted successfully..\n"+"Your current balance is "+ str(round(balance,2)) +" USDT"
+        msg ="BINANCE:\n" + "BOT       :" + BOT_NAME + "\nTest message has been executed successfully!\n"+"Your current balance is "+ str(round(balance,2)) +" USDT."
         r = requests.post(url, headers=headers, data = {'message':msg})        
     
     print("---------------------------------")
