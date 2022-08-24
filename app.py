@@ -260,6 +260,13 @@ def webhook():
                 if j['symbol'] == symbol:
                     qty_precision = int(j['quantityPrecision'])
             print("qty_precision",qty_precision)
+            
+            if amount[0]=='@':            
+                fiat=float(amount[1:len(amount)])
+                qty_close=round(fiat,qty_precision)
+                usdt=round(fiat*bid,qty_precision)
+                print("SELL/CloseLong by @ amount=", fiat, " ", COIN, ">> USDT=",round(usdt,3))
+            
             #check if sell in % or $
             if amount[0]=='%':            
                 qty_close=round(percent*posiAmt/100,qty_precision)                
@@ -296,6 +303,14 @@ def webhook():
                 if j['symbol'] == symbol:
                     qty_precision = int(j['quantityPrecision'])
             print("qty_precision",qty_precision)
+            
+            if amount[0]=='@':            
+                fiat=float(amount[1:len(amount)])
+                qty_close=round(fiat,qty_precision)
+                usdt=round(fiat*bid,qty_precision)
+                print("SELL/CloseShort by @ amount=", fiat, " ", COIN, ">> USDT=",round(usdt,3))
+            
+            
             #check if buy in % or $
             if amount[0]=='%':            
                 qty_close=round(percent*posiAmt/100,qty_precision)
